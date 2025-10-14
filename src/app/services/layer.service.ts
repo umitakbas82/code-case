@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Layer } from '../models/layerModel';
 
 
@@ -9,6 +9,7 @@ import { Layer } from '../models/layerModel';
 export class LayerService {
   private readonly layers$ = new BehaviorSubject<Layer[]>([]);
   private readonly activeLayerId$ = new BehaviorSubject<string | null>(null);
+  public layerVisibilityChanged = new Subject<{ layerId: string; isVisible: boolean }>();
   constructor() { this.addLayer('Varsayılan Katman') }//uygulama başlarken varsayılan boş bir katman 
 
 
@@ -49,6 +50,7 @@ export class LayerService {
   //Katman görünürlüğü durumu
   toggleLayerVisibility(id: string): void {
     const currentLayers = this.layers$.getValue();
+    let changedLayer: Layer | undefined;
     const updatedLayers = currentLayers.map(layer => {
       if (layer.id === id) {
         // ID eşleşirse, isVisible özelliğini tersine çevir
@@ -58,5 +60,9 @@ export class LayerService {
     });
     // Güncellenmiş listeyi BehaviorSubject'e gönder
     this.layers$.next(updatedLayers);
+
+    if (changedLayer) {
+      this.layerVisibilityChanged.next({ layerId: changedLayer.id, isVisible: changedLayer.isVisible });
+    }
   }
 }

@@ -1,17 +1,37 @@
-import { Injectable } from '@angular/core';
-import * as fabric from 'fabric';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Canvas, Rect, Image, FabricObject } from 'fabric';
+import { Subject, takeUntil } from 'rxjs';
+import { LayerService } from './layer.service';
+import fabric from 'fabric/fabric-impl';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CanvasService {
 
-  private canvas!: fabric.Canvas;
+  private canvas!: Canvas;
+  private activeLayerId: string | null = null; //Aktif katmanID
+  private destroy$ = new Subject<void>();
 
-  constructor() { }
 
-  initCanvas(id: string): fabric.Canvas {
-    this.canvas = new fabric.Canvas(id, {
+
+
+  constructor(private layerService: LayerService) {
+    this.layerService.getactiveLayerId().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(id => {
+      this.activeLayerId = id;
+    });
+
+    this.layerService.layerVisibilityChanged.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(({ layerId, isVisible }) => {
+      this.updateObjectsVisibility(layerId, isVisible);
+    });
+  }
+
+  initCanvas(id: string): Canvas {
+    this.canvas = new Canvas(id, {
       width: 800,
       height: 600,
       backgroundColor: '#fff'
@@ -24,7 +44,7 @@ export class CanvasService {
   async setBackgroundImage(url: string): Promise<void> {
     try {
 
-      const img = await fabric.Image.fromURL(url);
+      const img = await Image.fromURL(url);
 
       if (this.canvas) {
 
@@ -48,7 +68,12 @@ export class CanvasService {
 
 
   addRectangle(): void {
-    const rect = new fabric.Rect({
+
+    if (!this.activeLayerId) {
+      alert('Bir Katman Seçiniz');
+      return;
+    }
+    const rect = new Rect({
       left: 100,
       top: 100,
       fill: 'rgba(255, 0, 0, 0.3)',
@@ -60,6 +85,28 @@ export class CanvasService {
     this.canvas?.add(rect);
   }
 
+
+  private updateObjectsVisibility(layerId: string, isVisible: boolean): void {
+    if (!this.canvas) return;
+
+
+    this.canvas.getObjects().forEach((obj: FabricObject) => {
+
+
+      if (obj.layerId === layerId) {
+        obj.set('visible', isVisible);
+      }
+    });
+
+
+    this.canvas.renderAll();
+  }
+
+  //Subscription Temizle
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
 
 
