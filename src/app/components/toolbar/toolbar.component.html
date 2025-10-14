@@ -2,6 +2,6 @@
     <h2>Araç Çubuğu</h2>
     <input type="file" #imageUploader style="display: none" (change)="onImageUpload($event)" accept="image/*" name=""
         id="">
-    <button (click)="imageUploader.click()">Resim Yükle</button>
-    <button (click)="addRectangle()">Dikdörtgen Çiz</button>
+    <button class="btn btn-light" (click)="imageUploader.click()">Resim Yükle</button>
+    <button class="btn btn-light" (click)="addRectangle()">Dikdörtgen Çiz</button>
 </div>

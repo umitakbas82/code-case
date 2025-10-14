@@ -45,4 +45,18 @@ export class LayerService {
   getactiveLayerId(): Observable<string | null> {
     return this.activeLayerId$.asObservable();
   }
+
+  //Katman görünürlüğü durumu
+  toggleLayerVisibility(id: string): void {
+    const currentLayers = this.layers$.getValue();
+    const updatedLayers = currentLayers.map(layer => {
+      if (layer.id === id) {
+        // ID eşleşirse, isVisible özelliğini tersine çevir
+        return { ...layer, isVisible: !layer.isVisible };
+      }
+      return layer;
+    });
+    // Güncellenmiş listeyi BehaviorSubject'e gönder
+    this.layers$.next(updatedLayers);
+  }
 }
