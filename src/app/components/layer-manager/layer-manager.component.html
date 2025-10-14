@@ -1,0 +1,8 @@
+<div class="layer-manager-container">
+    <h3>Katmanlar</h3>
+    <ul>
+        <li *ngFor="let layer of layers$ | async">
+            {{ layer.name }}
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,20 @@
+.layer-manager-container {
+    width: 250px;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    background-color: #fafafa;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border-radius: 4px;
+    font-family: "Nunito", sans-serif;
+}
