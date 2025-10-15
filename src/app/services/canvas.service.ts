@@ -56,7 +56,7 @@ export class CanvasService {
         img.layerId = activeLayerId;
         this.canvas.add(img);
 
-        this.canvas.moveTo(img, 0);
+        this.canvas.sendObjectToBack(img);
         this.canvas.renderAll();
       }
     } catch (error) {
