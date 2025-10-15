@@ -60,7 +60,7 @@ export class LayerService {
   //Katman görünürlüğü durumu
   toggleLayerVisibility(id: string): void {
     const currentLayers = this.layers$.getValue();
-    let changedLayer: Layer | undefined;
+
     const updatedLayers = currentLayers.map(layer => {
       if (layer.id === id) {
         // ID eşleşirse, isVisible özelliğini tersine çevir
@@ -68,6 +68,8 @@ export class LayerService {
       }
       return layer;
     });
+
+    const changedLayer = updatedLayers.find(l => l.id === id);
     // Güncellenmiş listeyi BehaviorSubject'e gönder
     this.layers$.next(updatedLayers);
 

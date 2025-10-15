@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Canvas, Rect, Image, FabricObject } from 'fabric';
 import { Subject, takeUntil } from 'rxjs';
 import { LayerService } from './layer.service';
-import fabric from 'fabric/fabric-impl';
+
 
 @Injectable({
   providedIn: 'root'
@@ -41,24 +41,26 @@ export class CanvasService {
 
 
 
-  async setBackgroundImage(url: string): Promise<void> {
+  async addImageToCanvas(url: string): Promise<void> {
+    const activeLayerId = this.layerService.getActiveLayerIdValue();
+    if (!activeLayerId) {
+      alert('Lütfen önce resmi eklemek istediğiniz katmanı seçin!');
+      return;
+    }
     try {
-
       const img = await Image.fromURL(url);
-
       if (this.canvas) {
-
-        this.canvas.backgroundImage = img;
-
-
         img.scaleToWidth(this.canvas.width || 800);
         img.scaleToHeight(this.canvas.height || 600);
+        img.set({ selectable: false, evented: false });
+        img.layerId = activeLayerId;
+        this.canvas.add(img);
 
-
+        this.canvas.moveTo(img, 0);
         this.canvas.renderAll();
       }
     } catch (error) {
-      console.error('Arka plan resmi yüklenirken bir hata oluştu:', error);
+      console.error('Resim nesnesi oluşturulurken bir hata oluştu:', error);
     }
   }
 
@@ -82,6 +84,7 @@ export class CanvasService {
       strokeWidth: 2,
       width: 150,
       height: 100,
+      layerId: activeLayerId
     });
     console.log('Atanan Katman ID:', rect.layerId);
     this.canvas?.add(rect);

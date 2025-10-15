@@ -18,7 +18,7 @@ export class ToolbarComponent {
       reader.onload = (e) => {
         const imageUrl = e.target?.result as string;
 
-        this.canvasService.setBackgroundImage(imageUrl);
+        this.canvasService.addImageToCanvas(imageUrl);
       };
       reader.readAsDataURL(file);
     }
