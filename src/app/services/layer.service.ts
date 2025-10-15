@@ -8,9 +8,15 @@ import { Layer } from '../models/layerModel';
 })
 export class LayerService {
   private readonly layers$ = new BehaviorSubject<Layer[]>([]);
-  private readonly activeLayerId$ = new BehaviorSubject<string | null>(null);
+  private activeLayerId$ = new BehaviorSubject<string | null>(null);
   public layerVisibilityChanged = new Subject<{ layerId: string; isVisible: boolean }>();
-  constructor() { this.addLayer('Varsayılan Katman') }//uygulama başlarken varsayılan boş bir katman 
+
+
+
+  constructor() {
+    this.addLayer('Varsayılan Katman')
+    console.log('LayerService Constructor Bitti. O anki aktif ID:', this.getActiveLayerIdValue());
+  }//uygulama başlarken varsayılan boş bir katman 
 
 
 
@@ -45,6 +51,10 @@ export class LayerService {
 
   getactiveLayerId(): Observable<string | null> {
     return this.activeLayerId$.asObservable();
+  }
+
+  getActiveLayerIdValue(): string | null {
+    return this.activeLayerId$.getValue();
   }
 
   //Katman görünürlüğü durumu

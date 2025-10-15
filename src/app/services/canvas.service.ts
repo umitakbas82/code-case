@@ -10,18 +10,18 @@ import fabric from 'fabric/fabric-impl';
 export class CanvasService {
 
   private canvas!: Canvas;
-  private activeLayerId: string | null = null; //Aktif katmanID
+  //private activeLayerId: string | null = null; //Aktif katmanID
   private destroy$ = new Subject<void>();
 
 
 
 
   constructor(private layerService: LayerService) {
-    this.layerService.getactiveLayerId().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(id => {
-      this.activeLayerId = id;
-    });
+    // this.layerService.getactiveLayerId().pipe(
+    //   takeUntil(this.destroy$)
+    // ).subscribe(id => {
+    //   this.activeLayerId = id;
+    // });
 
     this.layerService.layerVisibilityChanged.pipe(
       takeUntil(this.destroy$)
@@ -68,11 +68,12 @@ export class CanvasService {
 
 
   addRectangle(): void {
-
-    if (!this.activeLayerId) {
-      alert('Bir Katman Seçiniz');
+    const activeLayerId = this.layerService.getActiveLayerIdValue();
+    if (!activeLayerId) {
+      alert('Lütfen önce bir katman seçin!');
       return;
     }
+
     const rect = new Rect({
       left: 100,
       top: 100,
@@ -82,6 +83,7 @@ export class CanvasService {
       width: 150,
       height: 100,
     });
+    console.log('Atanan Katman ID:', rect.layerId);
     this.canvas?.add(rect);
   }
 

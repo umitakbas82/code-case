@@ -18,7 +18,9 @@ export class LayerManagerComponent implements OnInit {
 
 
 
-  constructor(private layerService: LayerService) { }
+  constructor(private layerService: LayerService) {
+    console.log('LayerManagerComponent Constructor ÇALIŞTI!');
+  }
 
   ngOnInit(): void {
     this.layers$ = this.layerService.getLayers();
