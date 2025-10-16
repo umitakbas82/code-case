@@ -7,14 +7,13 @@
 </div> -->
 
 
-<div class="toolbar-container p-2 d-flex align-items-center border-bottom">
-
+<nav class="navbar navbar-light bg-white p-2">
     <input type="file" #imageUploader style="display: none" (change)="onImageUpload($event)" accept="image/*" />
     <button class="btn btn-light me-3" (click)="imageUploader.click()" title="Resim Yükle">
-        <i class="bi bi-upload"></i>
+        <i class="bi bi-upload"></i> Resim Yükle
     </button>
 
-    <div class="btn-group" role="group" aria-label="Drawing tools">
+    <div class="btn-group" role="group">
         <button type="button" class="btn btn-outline-primary" title="Dikdörtgen Çiz" (click)="addRectangle()"
             [class.active]="activeTool === 'rect'">
             <i class="bi bi-square"></i>
@@ -29,4 +28,4 @@
         </button>
     </div>
 
-</div>
+</nav>

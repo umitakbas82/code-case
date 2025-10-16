@@ -1,1 +1,44 @@
-<p>dashboard works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Annotation Aracı</a>
+
+        <div class="d-flex align-items-center" *ngIf="currentUser$ | async as user">
+            <span class="navbar-text me-3">
+                Hoş geldin, <strong>{{ user.username }}</strong>
+            </span>
+            <button class="btn btn-outline-secondary btn-sm" (click)="logout()">Çıkış Yap</button>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-4">
+    <h2 class="mb-4">Görev Listeniz</h2>
+
+    <div class="row" *ngIf="tasks$ | async as tasks; else loading">
+
+        <div *ngIf="tasks.length === 0" class="col-12">
+            <div class="alert alert-info">Size atanmış bir görev bulunmamaktadır.</div>
+        </div>
+
+        <div class="col-md-4 mb-4" *ngFor="let task of tasks">
+            <a [routerLink]="['/annotate', task.id]" class="card-link">
+                <div class="card h-100 task-card">
+                    <img [src]="task.imageUrl" class="card-img-top" alt="Görev #{{ task.id }}">
+                    <div class="card-body">
+                        <h5 class="card-title">Görev #{{ task.id }}</h5>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <span class="badge" [class.bg-warning]="task.status === 'pending'"
+                            [class.bg-success]="task.status === 'completed'">
+                            {{ task.status === 'pending' ? 'Bekliyor' : 'Tamamlandı' }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <ng-template #loading>
+        <p class="text-muted">Görevler yükleniyor...</p>
+    </ng-template>
+</main>
