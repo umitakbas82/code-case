@@ -1,0 +1,35 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "user1",
+            "password": "123"
+        },
+        {
+            "id": 2,
+            "username": "user2",
+            "password": "456"
+        }
+    ],
+    "tasks": [
+        {
+            "id": 1,
+            "userId": 1,
+            "imageUrl": "https://i.imgur.com/g25Vf6w.jpeg",
+            "status": "pending"
+        },
+        {
+            "id": 2,
+            "userId": 1,
+            "imageUrl": "https://i.imgur.com/F42fNGo.jpeg",
+            "status": "completed"
+        },
+        {
+            "id": 3,
+            "userId": 2,
+            "imageUrl": "https://i.imgur.com/Gv2uA0G.jpeg",
+            "status": "pending"
+        }
+    ],
+    "annotations": []
+}
