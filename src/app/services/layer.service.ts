@@ -10,7 +10,7 @@ export class LayerService {
   private readonly layers$ = new BehaviorSubject<Layer[]>([]);
   private activeLayerId$ = new BehaviorSubject<string | null>(null);
   public layerVisibilityChanged = new Subject<{ layerId: string; isVisible: boolean }>();
-
+  public layerLockChanged = new Subject<{ layerId: string; isLocked: boolean }>();
 
 
   constructor() {
@@ -75,6 +75,24 @@ export class LayerService {
 
     if (changedLayer) {
       this.layerVisibilityChanged.next({ layerId: changedLayer.id, isVisible: changedLayer.isVisible });
+    }
+  }
+
+
+  toggleLayerLock(id: string) {
+    const currentLayers = this.layers$.getValue();
+    const updatedLayers = currentLayers.map(layer => {
+      if (layer.id === id) {
+        return { ...layer, isLocked: !layer.isLocked }
+      }
+      return layer;
+    });
+
+    this.layers$.next(updatedLayers);
+
+    const changedLayer = updatedLayers.find(l => l.id === id);
+    if (changedLayer) {
+      this.layerLockChanged.next({ layerId: changedLayer.id, isLocked: changedLayer.isLocked })//değişikliği canvas servise BİLDİR!!!
     }
   }
 }

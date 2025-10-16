@@ -19,6 +19,9 @@
             <button class="btn btn-light btn-sm p-1" (click)="toggleVisibility(layer.id, $event)">
                 <i class="bi" [class.bi-eye-fill]="layer.isVisible" [class.bi-eye-slash-fill]="!layer.isVisible"></i>
             </button>
+            <button class="btn btn-light btn-sm p-1" (click)="toggleLock(layer.id, $event)">
+                <i class="bi" [class.bi-lock-fill]="layer.isLocked" [class.bi-unlock-fill]="!layer.isLocked"></i>
+            </button>
         </li>
     </ul>
 </div>

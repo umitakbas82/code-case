@@ -57,4 +57,9 @@ export class LayerManagerComponent implements OnInit {
     event.stopPropagation()
     this.layerService.toggleLayerVisibility(id);
   }
+  toggleLock(id: string, event: MouseEvent) {
+    event.stopPropagation();
+    this.layerService.toggleLayerLock(id)
+  }
+
 }

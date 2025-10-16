@@ -25,6 +25,16 @@ export class CanvasService {
     //   this.activeLayerId = id;
     // });
 
+
+    //Layer kilit durumunu dinle
+    this.layerService.layerLockChanged.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(({ layerId, isLocked }) => {
+      this.updateObjectsLockStatus(layerId, isLocked);
+    })
+
+
+    //Layer görünürlük durumunu dinle
     this.layerService.layerVisibilityChanged.pipe(
       takeUntil(this.destroy$)
     ).subscribe(({ layerId, isVisible }) => {
@@ -218,6 +228,25 @@ export class CanvasService {
 
     this.canvas.renderAll();
   }
+
+
+  private updateObjectsLockStatus(LayerId: string, isLocked: boolean) {
+    if (!this.canvas) return;
+
+
+    this.canvas.getObjects().forEach((obj: FabricObject) => {
+      if (obj.layerId === LayerId) {
+        obj.set({
+          selectable: !isLocked,
+          evented: !isLocked,
+        });
+      }
+    });
+  }
+
+
+
+
 
   //Subscription Temizle
   ngOnDestroy(): void {
