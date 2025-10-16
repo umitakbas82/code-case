@@ -1,7 +1,32 @@
-<div class="toolbar-container">
+<!-- <div class="toolbar-container">
     <h2>Araç Çubuğu</h2>
     <input type="file" #imageUploader style="display: none" (change)="onImageUpload($event)" accept="image/*" name=""
         id="">
     <button class="btn btn-light" (click)="imageUploader.click()">Resim Yükle</button>
     <button class="btn btn-light" (click)="addRectangle()">Dikdörtgen Çiz</button>
+</div> -->
+
+
+<div class="toolbar-container p-2 d-flex align-items-center border-bottom">
+
+    <input type="file" #imageUploader style="display: none" (change)="onImageUpload($event)" accept="image/*" />
+    <button class="btn btn-light me-3" (click)="imageUploader.click()" title="Resim Yükle">
+        <i class="bi bi-upload"></i>
+    </button>
+
+    <div class="btn-group" role="group" aria-label="Drawing tools">
+        <button type="button" class="btn btn-outline-primary" title="Dikdörtgen Çiz" (click)="addRectangle()"
+            [class.active]="activeTool === 'rect'">
+            <i class="bi bi-square"></i>
+        </button>
+        <button type="button" class="btn btn-outline-primary" title="Daire Çiz" (click)="addCircle()"
+            [class.active]="activeTool === 'circle'">
+            <i class="bi bi-circle"></i>
+        </button>
+        <button type="button" class="btn btn-outline-primary" title="Çokgen Çiz" (click)="startPolygon()"
+            [class.active]="activeTool === 'polygon'">
+            <i class="bi bi-pentagon"></i>
+        </button>
+    </div>
+
 </div>

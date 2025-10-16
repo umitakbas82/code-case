@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
+import { Polygon } from 'fabric';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,6 +9,11 @@ import { CanvasService } from '../../services/canvas.service';
   styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent {
+
+  //Hangi aracın aktif olduğunu bul
+  public activeTool: 'rect' | 'circle' | 'polygon' | null = null;
+
+
   constructor(private canvasService: CanvasService) { }
 
   //Resmi CanvasService ile yükleme
@@ -24,8 +30,24 @@ export class ToolbarComponent {
     }
   }
 
+
+  //Dikdörtgen çiz
   addRectangle(): void {
+    this.activeTool = 'rect'
     this.canvasService.addRectangle();
+  }
+
+  //Daire Çiz
+  addCircle() {
+    this.activeTool = 'circle';
+    this.canvasService.addCircle();
+
+  }
+
+
+  startPolygon() {
+    this.activeTool = 'polygon';
+    this.canvasService.startPolygonDrawing()
   }
 
 }
