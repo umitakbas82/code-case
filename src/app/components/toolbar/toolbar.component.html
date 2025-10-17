@@ -26,6 +26,12 @@
             [class.active]="activeTool === 'polygon'">
             <i class="bi bi-pentagon"></i>
         </button>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary" title="Metin Ekle" (click)="addText()"
+                [class.active]="activeTool === 'text'">
+                <i class="bi bi-fonts"></i>
+            </button>
+        </div>
     </div>
 
 </nav>

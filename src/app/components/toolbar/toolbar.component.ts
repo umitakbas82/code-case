@@ -11,7 +11,7 @@ import { Polygon } from 'fabric';
 export class ToolbarComponent {
 
   //Hangi aracın aktif olduğunu bul
-  public activeTool: 'rect' | 'circle' | 'polygon' | null = null;
+  public activeTool: 'rect' | 'circle' | 'polygon' | 'text' | null = null;
 
 
   constructor(private canvasService: CanvasService) { }
@@ -50,4 +50,11 @@ export class ToolbarComponent {
     this.canvasService.startPolygonDrawing()
   }
 
+
+  addText() {
+    this.activeTool = 'text';
+    this.canvasService.addText();
+  }
 }
+
+

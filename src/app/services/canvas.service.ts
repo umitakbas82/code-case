@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Canvas, Rect, Image, FabricObject, Circle, Polygon, Point, Line, TEvent } from 'fabric';
+import { Canvas, Rect, Image, FabricObject, Circle, Polygon, Point, Line, TEvent, IText } from 'fabric';
 import { Subject, takeUntil } from 'rxjs';
 import { LayerService } from './layer.service';
 
@@ -244,7 +244,27 @@ export class CanvasService {
     });
   }
 
+  //Metin ekle
+  addText() {
+    const activeLayerId = this.layerService.getActiveLayerIdValue();
+    if (!activeLayerId) {
+      alert('Bir Katman seçiniz');
+      return;
+    }
 
+    const text = new IText('Metni Düzenle', {
+      left: 150,
+      top: 150,
+      fontSize: 24,
+      fill: '#000000',
+      fontFamily: 'Arial',
+      layerId: activeLayerId
+    });
+
+    this.canvas?.add(text);
+    this.canvas?.setActiveObject(text);
+    this.canvas.renderAll();
+  }
 
 
 
