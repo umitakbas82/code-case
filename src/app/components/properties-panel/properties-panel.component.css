@@ -1,0 +1,6 @@
+.properties-panel-container {
+    width: 280px;
+    background-color: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+    overflow-y: auto;
+}

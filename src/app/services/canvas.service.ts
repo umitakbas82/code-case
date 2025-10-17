@@ -1,17 +1,18 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Canvas, Rect, Image, FabricObject, Circle, Polygon, Point, Line, TEvent, IText } from 'fabric';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LayerService } from './layer.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class CanvasService {
+export class CanvasService implements OnDestroy {
 
   private canvas!: Canvas;
   //private activeLayerId: string | null = null; //Aktif katmanID
   private destroy$ = new Subject<void>();
+  public selectedObject$ = new BehaviorSubject<FabricObject | null>(null);
 
   private drawingMode: 'polygon' | null = null;
   private polygonPoints: Point[] = []
@@ -52,6 +53,9 @@ export class CanvasService {
     this.canvas.on('mouse:down', (e) => this.onMouseDown(e))// Poligon çizimini başlatan envent burada olayları dinlemeye başla
     this.canvas.on('mouse:dblclick', () => this.onMouseDoubleClick());// Double Click ile çizim eventini bitir
 
+    this.canvas.on('selection:created', (e) => this.onObjectSelected());//Metin objesini seç
+    this.canvas.on('selection:updated', (e) => this.onObjectSelected());//Metin objesi update
+    this.canvas.on('selection:cleared', () => this.onObjectDeselected());//Metin objesi artık deselect
     return this.canvas;
   }
 
@@ -266,8 +270,24 @@ export class CanvasService {
     this.canvas.renderAll();
   }
 
+  private onObjectSelected() {
+    const selectedObject = this.canvas.getActiveObject();
+    this.selectedObject$.next(selectedObject || null);
+  }
 
 
+  private onObjectDeselected(): void {
+    this.selectedObject$.next(null);
+  }
+
+
+  public updateSelectedObjectProperties(props: any): void {
+    const activeObject = this.canvas.getActiveObject();
+    if (activeObject) {
+      activeObject.set(props);
+      this.canvas.renderAll();
+    }
+  }
   //Subscription Temizle
   ngOnDestroy(): void {
     this.destroy$.next();

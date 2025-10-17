@@ -1,0 +1,33 @@
+<div class="properties-panel-container p-3" *ngIf="selectedObject$ | async as selectedObject">
+    <h5 class="mb-3">Özellikler</h5>
+
+    <div class="mb-3">
+        <label for="fillColor" class="form-label">Dolgu Rengi</label>
+        <input type="color" class="form-control form-control-color" id="fillColor" [value]="selectedObject.fill"
+            (input)="changeProperty($event, 'fill')">
+    </div>
+
+    <div class="mb-3">
+        <label for="strokeColor" class="form-label">Çerçeve Rengi</label>
+        <input type="color" class="form-control form-control-color" id="strokeColor" [value]="selectedObject.stroke"
+            (input)="changeProperty($event, 'stroke')">
+    </div>
+
+    <div class="mb-3">
+        <label for="strokeWidth" class="form-label">Çerçeve Kalınlığı</label>
+        <input type="range" class="form-range" id="strokeWidth" min="0" max="30" [value]="selectedObject.strokeWidth"
+            (input)="changeNumericProperty($event, 'strokeWidth')">
+    </div>
+
+    <div *ngIf="selectedObject.type === 'i-text'">
+        <hr>
+        <h6 class="mb-3">Metin Özellikleri</h6>
+
+        <div class="mb-3">
+            <label for="fontSize" class="form-label">Font Boyutu</label>
+            <input type="number" class="form-control" id="fontSize" [value]="selectedObject.fontSize"
+                (input)="changeNumericProperty($event, 'fontSize')">
+        </div>
+    </div>
+
+</div>
