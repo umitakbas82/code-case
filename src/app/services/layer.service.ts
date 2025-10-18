@@ -100,4 +100,13 @@ export class LayerService {
   public getLayersValue(): Layer[] {
     return this.layers$.getValue();
   }
+
+
+  public loadLayers(layers: Layer[]): void {
+    this.layers$.next(layers);
+
+    if (layers.length > 0) {
+      this.setActiveLayer(layers[0].id);
+    }
+  }
 }

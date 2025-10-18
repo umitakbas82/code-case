@@ -9,6 +9,7 @@ import { LayerManagerComponent } from '../layer-manager/layer-manager.component'
 import { PropertiesPanelComponent } from '../properties-panel/properties-panel.component';
 import { TaskService } from '../../services/task.service'; // TaskService eklendi
 import { CanvasService } from '../../services/canvas.service'; // CanvasService eklendi
+import { LayerService } from '../../services/layer.service';
 
 @Component({
   selector: 'app-annotation-page',
@@ -24,36 +25,42 @@ import { CanvasService } from '../../services/canvas.service'; // CanvasService 
   styleUrls: ['./annotation-page.component.css'],
 })
 export class AnnotationPageComponent implements OnInit {
-  // Gerekli servisleri ve router'ı constructor'a inject ediyoruz
+
   constructor(
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private canvasService: CanvasService
+    private canvasService: CanvasService,
+    private layerService: LayerService
   ) {
     this.route.paramMap.pipe(
-      // 1. switchMap operatörünü ekliyoruz. Bu, bir Observable'ı diğerine dönüştürür.
       switchMap(params => {
-        // Gelen parametre (params) bir ParamMap nesnesidir.
         const taskId = params.get('taskId');
         if (taskId) {
-          // Parametreden gelen ID ile TaskService'ten asıl görevi istiyoruz.
-          // Bu, bir Observable<Task> döndürür.
           return this.taskService.getTaskById(+taskId);
         }
-        // Eğer URL'de ID yoksa, 'null' içeren bir observable döndürüyoruz.
         return of(null);
       })
-      // 3. Subscribe bloğuna artık ParamMap değil, Task nesnesi (veya null) gelir.
     ).subscribe(task => {
-      // 'task' artık bir görev nesnesidir ve 'imageUrl' özelliğine sahiptir.
-      if (task && task.imageUrl) {
+      if (task) {
+        // Görev ID'sini CanvasService'e bildir
         this.canvasService.setCurrentTaskId(task.id);
-        setTimeout(() => {
-          this.canvasService.addImageToCanvas(task.imageUrl);
-        }, 100);
+
+        // 1. Önce görevin resmini kanvasa yükle
+        this.canvasService.addImageToCanvas(task.imageUrl);
+
+        // 2. Ardından, bu göreve ait annotation verisini iste
+        this.taskService.getAnnotationForTask(task.id).subscribe(annotationData => {
+          if (annotationData && annotationData.layerState && annotationData.canvasState) {
+            console.log('Kayıtlı veri bulundu ve yükleniyor...', annotationData);
+            // 3. Gelen veriyle katmanları ve kanvası geri yükle
+            this.layerService.loadLayers(annotationData.layerState);
+            this.canvasService.loadCanvasState(annotationData.canvasState);
+          }
+        });
       }
     });
   }
+
 
 
 

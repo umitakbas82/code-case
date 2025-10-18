@@ -21,12 +21,17 @@ export class TaskService {
     return this.http.get<Task>(`${this.apiUrl}/tasks/${id}`);
   }
 
-
+  //Burada kaydetme methodu var
   saveAnnotationForTask(taskId: number, annotationData: any): Observable<any> {
     const dataToSave = {
       id: taskId,
       ...annotationData
     };
     return this.http.put(`${this.apiUrl}/annotations/${taskId}`, dataToSave);
+  }
+
+  //Burada son kaydedlileni geri getirme
+  getAnnotationForTask(taskId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/annotations/${taskId}`);
   }
 }

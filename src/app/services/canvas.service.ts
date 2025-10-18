@@ -323,6 +323,21 @@ export class CanvasService implements OnDestroy {
       });
   }
 
+  public loadCanvasState(canvasState: any) {
+    if (this.canvas && canvasState) {
+      this.canvas.loadFromJSON(canvasState, () => {
+        this.canvas.renderAll();
+        const layers = this.layerService.getLayersValue();
+        layers.forEach(layer => {
+          this.updateObjectsVisibility(layer.id, layer.isVisible);
+          this.updateObjectsLockStatus(layer.id, layer.isLocked);
+        })
+      })
+    }
+  }
+
+
+
   //Subscription Temizle
   ngOnDestroy(): void {
     this.destroy$.next();
