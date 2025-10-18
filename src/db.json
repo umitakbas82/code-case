@@ -15,19 +15,19 @@
         {
             "id": 1,
             "userId": 1,
-            "imageUrl": "https://i.imgur.com/g25Vf6w.jpeg",
+            "imageUrl": "https://picsum.photos/id/10/400/300",
             "status": "pending"
         },
         {
             "id": 2,
             "userId": 1,
-            "imageUrl": "https://i.imgur.com/F42fNGo.jpeg",
+            "imageUrl": "https://picsum.photos/id/20/400/300",
             "status": "completed"
         },
         {
             "id": 3,
             "userId": 2,
-            "imageUrl": "https://i.imgur.com/Gv2uA0G.jpeg",
+            "imageUrl": "https://picsum.photos/id/30/400/300",
             "status": "pending"
         }
     ],
