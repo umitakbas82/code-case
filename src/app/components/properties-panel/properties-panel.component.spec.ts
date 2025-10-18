@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Ekle
 import { PropertiesPanelComponent } from './properties-panel.component';
 
 describe('PropertiesPanelComponent', () => {
@@ -8,9 +8,12 @@ describe('PropertiesPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PropertiesPanelComponent]
+      imports: [
+        PropertiesPanelComponent,
+        HttpClientTestingModule // Ekle
+      ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PropertiesPanelComponent);
     component = fixture.componentInstance;

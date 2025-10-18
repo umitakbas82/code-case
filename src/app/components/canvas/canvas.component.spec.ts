@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Ekle
 import { CanvasComponent } from './canvas.component';
 
 describe('CanvasComponent', () => {
@@ -8,9 +8,12 @@ describe('CanvasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CanvasComponent]
+      imports: [
+        CanvasComponent,
+        HttpClientTestingModule // Ekle
+      ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CanvasComponent);
     component = fixture.componentInstance;
