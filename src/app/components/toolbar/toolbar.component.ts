@@ -69,6 +69,10 @@ export class ToolbarComponent {
   redo(): void {
     this.canvasService.redo();
   }
+
+  completeTask(): void {
+    this.canvasService.completeCurrentTask();
+  }
 }
 
 

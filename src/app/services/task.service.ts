@@ -34,4 +34,10 @@ export class TaskService {
   getAnnotationForTask(taskId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/annotations/${taskId}`);
   }
+
+
+  updateTaskStatus(taskId: number, status: 'completed'): Observable<Task> {
+    const update = { status: status };
+    return this.http.patch<Task>(`${this.apiUrl}/tasks/${taskId}`, update);
+  }
 }
