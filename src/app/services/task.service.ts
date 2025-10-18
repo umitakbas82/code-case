@@ -21,4 +21,12 @@ export class TaskService {
     return this.http.get<Task>(`${this.apiUrl}/tasks/${id}`);
   }
 
+
+  saveAnnotationForTask(taskId: number, annotationData: any): Observable<any> {
+    const dataToSave = {
+      id: taskId,
+      ...annotationData
+    };
+    return this.http.put(`${this.apiUrl}/annotations/${taskId}`, dataToSave);
+  }
 }

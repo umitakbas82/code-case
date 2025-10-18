@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Canvas, Rect, Image, FabricObject, Circle, Polygon, Point, Line, TEvent, IText } from 'fabric';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LayerService } from './layer.service';
+import { TaskService } from './task.service';
 
 
 @Injectable({
@@ -17,9 +18,9 @@ export class CanvasService implements OnDestroy {
   private drawingMode: 'polygon' | null = null;
   private polygonPoints: Point[] = []
   private tempLines: Line[] = [];
+  private currentTaskId: number | null = null;
 
-
-  constructor(private layerService: LayerService) {
+  constructor(private layerService: LayerService, private taskService: TaskService) {
     // this.layerService.getactiveLayerId().pipe(
     //   takeUntil(this.destroy$)
     // ).subscribe(id => {
@@ -288,6 +289,40 @@ export class CanvasService implements OnDestroy {
       this.canvas.renderAll();
     }
   }
+
+
+
+  public setCurrentTaskId(id: number): void {
+    this.currentTaskId = id;
+  }
+
+  public saveCanvasState(): void {
+    if (!this.currentTaskId) {
+      console.error('Kaydedilecek bir görev ID\'si bulunamadı!');
+      return;
+    }
+
+    // O anki katmanların durumunu al 
+    const layerState = this.layerService.getLayersValue();
+
+    // 2. DEĞİŞİKLİK: 'toJSON' yerine 'toObject' metodunu kullanıyoruz.
+    // Bu metot, özel özelliklerimizi de JSON'a dahil etmemize olanak tanır.
+    const canvasState = this.canvas.toObject(['layerId']);
+
+    const annotationData = {
+      layerState: layerState,
+      canvasState: canvasState
+    };
+
+    console.log('Kaydediliyor...', annotationData);
+
+    this.taskService.saveAnnotationForTask(this.currentTaskId, annotationData)
+      .subscribe({
+        next: () => alert('Çalışmanız başarıyla kaydedildi!'),
+        error: (err) => console.error('Kaydetme sırasında hata oluştu:', err)
+      });
+  }
+
   //Subscription Temizle
   ngOnDestroy(): void {
     this.destroy$.next();

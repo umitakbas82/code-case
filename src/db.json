@@ -1,35 +1,173 @@
 {
-    "users": [
+  "users": [
+    {
+      "id": 1,
+      "username": "user1",
+      "password": "123"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "password": "456"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "userId": 1,
+      "imageUrl": "https://picsum.photos/id/10/400/300",
+      "status": "pending"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "imageUrl": "https://picsum.photos/id/20/400/300",
+      "status": "completed"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "imageUrl": "https://picsum.photos/id/30/400/300",
+      "status": "pending"
+    }
+  ],
+  "annotations": [
+    {
+      "id": 1,
+      "layerState": [
         {
-            "id": 1,
-            "username": "user1",
-            "password": "123"
-        },
-        {
-            "id": 2,
-            "username": "user2",
-            "password": "456"
+          "id": "2eee7ce8-4096-41b8-af48-d4eea34f3106",
+          "name": "Varsayılan Katman",
+          "isVisible": true,
+          "isLocked": false
         }
-    ],
-    "tasks": [
-        {
-            "id": 1,
-            "userId": 1,
-            "imageUrl": "https://picsum.photos/id/10/400/300",
-            "status": "pending"
-        },
-        {
-            "id": 2,
-            "userId": 1,
-            "imageUrl": "https://picsum.photos/id/20/400/300",
-            "status": "completed"
-        },
-        {
-            "id": 3,
-            "userId": 2,
-            "imageUrl": "https://picsum.photos/id/30/400/300",
-            "status": "pending"
-        }
-    ],
-    "annotations": []
+      ],
+      "canvasState": {
+        "version": "6.7.1",
+        "objects": [
+          {
+            "cropX": 0,
+            "cropY": 0,
+            "layerId": "2eee7ce8-4096-41b8-af48-d4eea34f3106",
+            "type": "Image",
+            "version": "6.7.1",
+            "originX": "left",
+            "originY": "top",
+            "left": 0,
+            "top": 0,
+            "width": 400,
+            "height": 300,
+            "fill": "rgb(0,0,0)",
+            "stroke": null,
+            "strokeWidth": 0,
+            "strokeDashArray": null,
+            "strokeLineCap": "butt",
+            "strokeDashOffset": 0,
+            "strokeLineJoin": "miter",
+            "strokeUniform": false,
+            "strokeMiterLimit": 4,
+            "scaleX": 2,
+            "scaleY": 2,
+            "angle": 0,
+            "flipX": false,
+            "flipY": false,
+            "opacity": 1,
+            "shadow": null,
+            "visible": true,
+            "backgroundColor": "",
+            "fillRule": "nonzero",
+            "paintFirst": "fill",
+            "globalCompositeOperation": "source-over",
+            "skewX": 0,
+            "skewY": 0,
+            "src": "https://picsum.photos/id/10/400/300",
+            "crossOrigin": null,
+            "filters": []
+          },
+          {
+            "cropX": 0,
+            "cropY": 0,
+            "layerId": "2eee7ce8-4096-41b8-af48-d4eea34f3106",
+            "type": "Image",
+            "version": "6.7.1",
+            "originX": "left",
+            "originY": "top",
+            "left": 0,
+            "top": 0,
+            "width": 400,
+            "height": 300,
+            "fill": "rgb(0,0,0)",
+            "stroke": null,
+            "strokeWidth": 0,
+            "strokeDashArray": null,
+            "strokeLineCap": "butt",
+            "strokeDashOffset": 0,
+            "strokeLineJoin": "miter",
+            "strokeUniform": false,
+            "strokeMiterLimit": 4,
+            "scaleX": 2,
+            "scaleY": 2,
+            "angle": 0,
+            "flipX": false,
+            "flipY": false,
+            "opacity": 1,
+            "shadow": null,
+            "visible": true,
+            "backgroundColor": "",
+            "fillRule": "nonzero",
+            "paintFirst": "fill",
+            "globalCompositeOperation": "source-over",
+            "skewX": 0,
+            "skewY": 0,
+            "src": "https://picsum.photos/id/10/400/300",
+            "crossOrigin": null,
+            "filters": []
+          },
+          {
+            "rx": 0,
+            "ry": 0,
+            "layerId": "2eee7ce8-4096-41b8-af48-d4eea34f3106",
+            "type": "Rect",
+            "version": "6.7.1",
+            "originX": "left",
+            "originY": "top",
+            "left": 265,
+            "top": 163,
+            "width": 150,
+            "height": 100,
+            "fill": "rgba(255, 0, 0, 0.3)",
+            "stroke": "red",
+            "strokeWidth": 2,
+            "strokeDashArray": null,
+            "strokeLineCap": "butt",
+            "strokeDashOffset": 0,
+            "strokeLineJoin": "miter",
+            "strokeUniform": false,
+            "strokeMiterLimit": 4,
+            "scaleX": 1.5984,
+            "scaleY": 1.5984,
+            "angle": 0,
+            "flipX": false,
+            "flipY": false,
+            "opacity": 1,
+            "shadow": null,
+            "visible": true,
+            "backgroundColor": "",
+            "fillRule": "nonzero",
+            "paintFirst": "fill",
+            "globalCompositeOperation": "source-over",
+            "skewX": 0,
+            "skewY": 0
+          }
+        ],
+        "background": "#fff"
+      }
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    }
+  ]
 }

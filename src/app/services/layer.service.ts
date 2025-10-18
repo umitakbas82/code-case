@@ -78,7 +78,7 @@ export class LayerService {
     }
   }
 
-
+  //Layer kilitle ve aç
   toggleLayerLock(id: string) {
     const currentLayers = this.layers$.getValue();
     const updatedLayers = currentLayers.map(layer => {
@@ -94,5 +94,10 @@ export class LayerService {
     if (changedLayer) {
       this.layerLockChanged.next({ layerId: changedLayer.id, isLocked: changedLayer.isLocked })//değişikliği canvas servise BİLDİR!!!
     }
+  }
+
+
+  public getLayersValue(): Layer[] {
+    return this.layers$.getValue();
   }
 }

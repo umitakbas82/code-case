@@ -55,6 +55,10 @@ export class ToolbarComponent {
     this.activeTool = 'text';
     this.canvasService.addText();
   }
+
+  save(): void {
+    this.canvasService.saveCanvasState();
+  }
 }
 
 
