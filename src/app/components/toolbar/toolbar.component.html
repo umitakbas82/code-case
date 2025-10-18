@@ -33,6 +33,17 @@
             </button>
         </div>
     </div>
+
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-secondary" title="Geri Al" (click)="undo()"
+            [disabled]="!(historyService.undoStatus | async)">
+            <i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+        <button type="button" class="btn btn-outline-secondary" title="Yinele" (click)="redo()"
+            [disabled]="!(historyService.redoStatus | async)">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+    </div>
     <div class="flex-grow-1"></div>
     <button class="btn btn-success" (click)="save()">
         <i class="bi bi-save-fill me-2"></i>Kaydet

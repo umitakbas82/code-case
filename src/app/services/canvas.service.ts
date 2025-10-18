@@ -3,6 +3,7 @@ import { Canvas, Rect, Image, FabricObject, Circle, Polygon, Point, Line, TEvent
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { LayerService } from './layer.service';
 import { TaskService } from './task.service';
+import { HistoryService } from './history.service';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class CanvasService implements OnDestroy {
   private tempLines: Line[] = [];
   private currentTaskId: number | null = null;
 
-  constructor(private layerService: LayerService, private taskService: TaskService) {
+  constructor(private layerService: LayerService, private taskService: TaskService, private historyService: HistoryService) {
     // this.layerService.getactiveLayerId().pipe(
     //   takeUntil(this.destroy$)
     // ).subscribe(id => {
@@ -60,10 +61,12 @@ export class CanvasService implements OnDestroy {
 
     this.canvas.on('mouse:down', (e) => this.onMouseDown(e))// Poligon çizimini başlatan envent burada olayları dinlemeye başla
     this.canvas.on('mouse:dblclick', () => this.onMouseDoubleClick());// Double Click ile çizim eventini bitir
-
+    this.canvas.on('object:modified', () => this.saveState());//historyserviceye kaydet
     this.canvas.on('selection:created', (e) => this.onObjectSelected());//Metin objesini seç
     this.canvas.on('selection:updated', (e) => this.onObjectSelected());//Metin objesi update
     this.canvas.on('selection:cleared', () => this.onObjectDeselected());//Metin objesi artık deselect
+
+    this.saveState();
     return this.canvas;
   }
 
@@ -90,6 +93,7 @@ export class CanvasService implements OnDestroy {
     } catch (error) {
       console.error('Resim nesnesi oluşturulurken bir hata oluştu:', error);
     }
+    this.saveState()
   }
 
 
@@ -116,6 +120,7 @@ export class CanvasService implements OnDestroy {
     });
     console.log('Atanan Katman ID:', rect.layerId);
     this.canvas?.add(rect);
+    this.saveState()
   }
 
 
@@ -138,7 +143,7 @@ export class CanvasService implements OnDestroy {
     });
 
     this.canvas?.add(circle)
-
+    this.saveState()
   }
 
 
@@ -148,6 +153,7 @@ export class CanvasService implements OnDestroy {
     this.canvas.selection = false,
       this.canvas.defaultCursor = 'crosshair'
     console.log('Poligon çizim modu başladı. Lütfen noktaları eklemek için tıklayın.');
+    this.saveState()
   }
 
   private onMouseDown(event: TEvent) {
@@ -173,7 +179,7 @@ export class CanvasService implements OnDestroy {
     }
     console.log('Nokta eklendi', newPoint)
 
-
+    this.saveState()
 
   }
 
@@ -208,6 +214,7 @@ export class CanvasService implements OnDestroy {
 
     //Herşeyi bitir ve normale dön
     this.exitDrawingMode();
+    this.saveState()
   }
 
   private exitDrawingMode() {
@@ -295,6 +302,7 @@ export class CanvasService implements OnDestroy {
       activeObject.set(props);
       this.canvas.renderAll();
     }
+    this.saveState();
   }
 
 
@@ -332,14 +340,7 @@ export class CanvasService implements OnDestroy {
 
   public loadCanvasState(canvasState: any) {
     if (this.canvas && canvasState) {
-      this.canvas.loadFromJSON(canvasState, () => {
-        this.canvas.renderAll();
-        const layers = this.layerService.getLayersValue();
-        layers.forEach(layer => {
-          this.updateObjectsVisibility(layer.id, layer.isVisible);
-          this.updateObjectsLockStatus(layer.id, layer.isLocked);
-        })
-      })
+      this.loadState(canvasState);
     }
   }
 
@@ -355,6 +356,44 @@ export class CanvasService implements OnDestroy {
       this.canvas.renderAll();
     }
   }
+
+  private saveState(): void {
+    const state = this.canvas.toObject(['layerId']);
+    this.historyService.addState(state);
+  }
+
+  public undo(): void {
+    const prevState = this.historyService.undo();
+    if (prevState) {
+      this.loadState(prevState); // YENİ: Yardımcı metodu kullan
+    }
+  }
+
+  public redo(): void {
+    const nextState = this.historyService.redo();
+    if (nextState) {
+      this.loadState(nextState); // YENİ: Yardımcı metodu kullan
+    }
+  }
+
+  private loadState(state: any): void {
+
+    this.canvas.off('object:modified');
+    this.canvas.off('selection:created');
+    this.canvas.off('selection:updated');
+    this.canvas.off('selection:cleared');
+
+    this.canvas.loadFromJSON(state, () => {
+      this.canvas.renderAll();
+
+
+      this.canvas.on('object:modified', () => this.saveState());
+      this.canvas.on('selection:created', () => this.onObjectSelected());
+      this.canvas.on('selection:updated', () => this.onObjectSelected());
+      this.canvas.on('selection:cleared', () => this.onObjectDeselected());
+    });
+  }
+
 
   //Subscription Temizle
   ngOnDestroy(): void {

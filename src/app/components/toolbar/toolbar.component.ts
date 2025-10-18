@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
 import { Polygon } from 'fabric';
+import { HistoryService } from '../../services/history.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-toolbar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.css'
 })
@@ -14,7 +16,7 @@ export class ToolbarComponent {
   public activeTool: 'rect' | 'circle' | 'polygon' | 'text' | null = null;
 
 
-  constructor(private canvasService: CanvasService) { }
+  constructor(public canvasService: CanvasService, public historyService: HistoryService) { }
 
   //Resmi CanvasService ile yükleme
   onImageUpload(event: any) {
@@ -58,6 +60,14 @@ export class ToolbarComponent {
 
   save(): void {
     this.canvasService.saveCanvasState();
+  }
+
+  undo(): void {
+    this.canvasService.undo();
+  }
+
+  redo(): void {
+    this.canvasService.redo();
   }
 }
 
