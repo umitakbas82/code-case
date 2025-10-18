@@ -4,44 +4,48 @@
         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addLayerModal">
             <i class="bi bi-plus-lg"></i>
         </button>
-
-
-
     </div>
 
     <ul class="list-group">
         <li *ngFor="let layer of layers$ | async" (click)="setactivateLayer(layer.id)"
             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-            [class.active]="layer.id === (activeLayerId$ | async)">
+            [class.active]="layer.id === (activeLayerId$ | async)" [class.locked]="layer.isLocked">
 
-            {{ layer.name }}
+            <span class="layer-name">{{ layer.name }}</span>
 
-            <button class="btn btn-light btn-sm p-1" (click)="toggleVisibility(layer.id, $event)">
-                <i class="bi" [class.bi-eye-fill]="layer.isVisible" [class.bi-eye-slash-fill]="!layer.isVisible"></i>
-            </button>
-            <button class="btn btn-light btn-sm p-1" (click)="toggleLock(layer.id, $event)">
-                <i class="bi" [class.bi-lock-fill]="layer.isLocked" [class.bi-unlock-fill]="!layer.isLocked"></i>
-            </button>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light btn-sm p-1 me-2" title="Yeniden Adlandır"
+                    (click)="renameLayer(layer, $event)">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="btn btn-light btn-sm p-1 me-2" title="Görünürlüğü Değiştir"
+                    (click)="toggleVisibility(layer.id, $event)">
+                    <i class="bi" [class.bi-eye-fill]="layer.isVisible"
+                        [class.bi-eye-slash-fill]="!layer.isVisible"></i>
+                </button>
+                <button class="btn btn-light btn-sm p-1" title="Kilitle/Aç" (click)="toggleLock(layer.id, $event)">
+                    <i class="bi" [class.bi-lock-fill]="layer.isLocked" [class.bi-unlock-fill]="!layer.isLocked"></i>
+                </button>
+                <button class="btn btn-light btn-sm p-1 ms-2" title="Sil" (click)="deleteLayer(layer.id, $event)">
+                    <i class="bi bi-trash-fill text-danger"></i>
+                </button>
+            </div>
         </li>
     </ul>
 </div>
 
-<!-- Yeni Katman Modal -->
-<div class="modal fade" #addLayerModal id="addLayerModal" tabindex="-1" aria-labelledby="addLayerModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="addLayerModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addLayerModalLabel">Yeni Katman Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Yeni Katman Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="layerName" class="form-label">Katman Adı</label>
-                        <input type="text" class="form-control" id="layerName" #layerNameInput>
-                    </div>
-                </form>
+                <div class="mb-3">
+                    <label for="layerName" class="form-label">Katman Adı</label>
+                    <input type="text" class="form-control" id="layerName" #layerNameInput>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>

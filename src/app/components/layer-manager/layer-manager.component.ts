@@ -62,4 +62,20 @@ export class LayerManagerComponent implements OnInit {
     this.layerService.toggleLayerLock(id)
   }
 
+  renameLayer(layer: Layer, event: MouseEvent): void {
+    event.stopPropagation();
+    const newName = prompt('Yeni katman adı:', layer.name);
+    // Eğer kullanıcı yeni bir isim girdiyse ve iptal etmediyse
+    if (newName && newName.trim() !== '') {
+      this.layerService.renameLayer(layer.id, newName.trim());
+    }
+  }
+
+  deleteLayer(id: string, event: MouseEvent): void {
+    event.stopPropagation();
+    if (confirm('Bu katmanı ve içindeki tüm çizimleri kalıcı olarak silmek istediğinizden emin misiniz?')) {
+      this.layerService.deleteLayer(id);
+    }
+  }
+
 }

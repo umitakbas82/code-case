@@ -11,7 +11,7 @@ export class LayerService {
   private activeLayerId$ = new BehaviorSubject<string | null>(null);
   public layerVisibilityChanged = new Subject<{ layerId: string; isVisible: boolean }>();
   public layerLockChanged = new Subject<{ layerId: string; isLocked: boolean }>();
-
+  public layerDeleted = new Subject<string>();
 
   constructor() {
     this.addLayer('Varsayılan Katman')
@@ -109,4 +109,28 @@ export class LayerService {
       this.setActiveLayer(layers[0].id);
     }
   }
+
+
+  public renameLayer(id: string, newName: string) {
+    const currentLayers = this.getLayersValue();
+    const updatedLayers = currentLayers.map(layer => {
+      if (layer.id === id) {
+        return { ...layer, name: newName };
+      }
+      return layer;
+    });
+    this.layers$.next(updatedLayers);
+  }
+
+  public deleteLayer(id: string): void {
+    const currentLayers = this.getLayersValue();
+    // Silinmek istenen katman dışındaki tüm katmanları al
+    const filteredLayers = currentLayers.filter(layer => layer.id !== id);
+    this.layers$.next(filteredLayers);
+
+    // CanvasService'e hangi katmanın silindiğini bildir
+    this.layerDeleted.next(id);
+  }
+
+
 }

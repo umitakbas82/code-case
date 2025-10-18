@@ -42,6 +42,13 @@ export class CanvasService implements OnDestroy {
     ).subscribe(({ layerId, isVisible }) => {
       this.updateObjectsVisibility(layerId, isVisible);
     });
+
+
+    this.layerService.layerDeleted.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(deletedLayerId => {
+      this.removeObjectsByLayerId(deletedLayerId);
+    });
   }
 
   initCanvas(id: string): Canvas {
@@ -336,7 +343,18 @@ export class CanvasService implements OnDestroy {
     }
   }
 
+  private removeObjectsByLayerId(layerId: string): void {
+    if (!this.canvas) return;
 
+
+    const objectsToDelete = this.canvas.getObjects().filter(obj => obj.layerId === layerId);
+
+    // Bulunan tüm nesneleri kanvastan kaldır!!!!
+    if (objectsToDelete.length > 0) {
+      this.canvas.remove(...objectsToDelete);
+      this.canvas.renderAll();
+    }
+  }
 
   //Subscription Temizle
   ngOnDestroy(): void {
